@@ -76,7 +76,7 @@ const portfolioData = {
   ]
 };
 
-// --- Custom Hooks ---
+// --- Hooks ---
 const useScrollSpy = (sectionIds) => {
   const [activeSection, setActiveSection] = useState('');
 
@@ -175,12 +175,12 @@ const SkillCategory = ({ category, skills, icon, index }) => {
       onMouseLeave={() => setIsHovered(false)}
       style={{ animationDelay: `${index * 200}ms` }}
     >
-      {/* Animated background gradient */}
+      
       <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/20 via-blue-500/20 to-purple-500/20 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-xl"></div>
       
       <div className="relative bg-slate-800/60 backdrop-blur-sm p-6 rounded-xl border border-slate-700/50 hover:border-cyan-400/50 transition-all duration-500 hover:shadow-2xl hover:shadow-cyan-400/20 transform hover:-translate-y-2 hover:scale-[1.02]">
         
-        {/* Header with animated icon */}
+        
         <div className="flex items-center gap-4 mb-6">
           <div className={`p-3 rounded-xl transition-all duration-500 ${
             isHovered 
@@ -199,7 +199,7 @@ const SkillCategory = ({ category, skills, icon, index }) => {
           </div>
         </div>
 
-        {/* Skills grid with staggered animations */}
+        
         <div className="grid grid-cols-2 gap-3">
           {skills.map((skill, skillIndex) => (
             <div
@@ -207,16 +207,9 @@ const SkillCategory = ({ category, skills, icon, index }) => {
               className="relative group/skill"
               style={{ animationDelay: `${(index * 200) + (skillIndex * 100)}ms` }}
             >
-              {/* Skill pill with complex hover effects */}
               <div className="relative overflow-hidden bg-gradient-to-r from-slate-700/80 to-slate-600/80 text-slate-200 px-4 py-2.5 rounded-lg text-sm font-medium transition-all duration-300 hover:from-cyan-500/30 hover:to-blue-500/30 hover:text-white cursor-default border border-slate-600/30 hover:border-cyan-400/60 hover:shadow-lg hover:shadow-cyan-400/25 transform hover:scale-105">
-                
-                {/* Animated background shine effect */}
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover/skill:translate-x-full transition-transform duration-700"></div>
-                
-                {/* Skill text */}
                 <span className="relative z-10">{skill}</span>
-                
-                {/* Bottom accent line */}
                 <div className="absolute bottom-0 left-0 h-0.5 w-0 bg-gradient-to-r from-cyan-400 to-blue-500 group-hover/skill:w-full transition-all duration-500"></div>
               </div>
             </div>
@@ -301,7 +294,6 @@ export default function EnhancedPortfolio() {
             SHANMUKH
           </h1>
           
-          {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
             <NavLink href="#home" isActive={activeSection === 'home'}>Home</NavLink>
             <NavLink href="#about" isActive={activeSection === 'about'}>About</NavLink>
@@ -310,7 +302,6 @@ export default function EnhancedPortfolio() {
             <NavLink href="#contact" isActive={activeSection === 'contact'}>Contact</NavLink>
           </nav>
 
-          {/* Mobile Menu Button */}
           <button 
             className="md:hidden text-gray-400 hover:text-white transition-colors duration-300"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -319,7 +310,6 @@ export default function EnhancedPortfolio() {
           </button>
         </header>
 
-        {/* Mobile Navigation */}
         {mobileMenuOpen && (
           <div className="md:hidden absolute top-full left-0 w-full bg-gray-900/95 backdrop-blur-md border-b border-gray-800/50 z-40">
             <nav className="flex flex-col space-y-4 p-6">
@@ -337,21 +327,18 @@ export default function EnhancedPortfolio() {
         )}
 
         <main className="pt-8">
-          {/* Hero Section */}
           <section id="home" className="text-center py-20 md:py-32 flex flex-col items-center">
             <div className="w-36 h-36 bg-gradient-to-br from-cyan-400 to-blue-600 rounded-full mb-6 shadow-2xl flex items-center justify-center text-4xl font-bold text-white">
               SN
             </div>
             <h2 className="text-5xl md:text-6xl font-extrabold text-white">
-              Hello, I&apos;m <span className="text-cyan-400">
+              Hello, I'm <span className="text-cyan-400">
                 <TypeWriter text="Shanmukh" delay={150} />
               </span>
             </h2>
             <p className="text-xl md:text-2xl text-cyan-300 mt-2 font-medium">{portfolioData.title}</p>
             <p className="text-lg md:text-xl text-gray-400 mt-4 max-w-2xl leading-relaxed">{portfolioData.bio}</p>
             <div className="flex items-center gap-2 text-gray-500 mt-4">
-              <MapPin size={16} />
-              <span>{portfolioData.location}</span>
             </div>
             <div className="flex gap-4 mt-8">
               <a href="#projects" className="bg-cyan-500 hover:bg-cyan-600 text-white font-bold py-3 px-8 rounded-lg transition-all duration-300 shadow-lg shadow-cyan-500/20 hover:scale-105">
