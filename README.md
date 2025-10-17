@@ -2,8 +2,8 @@
 
 This repository contains the source code for my personal portfolio website, built with Next.js and Tailwind CSS. The site showcases my projects, skills, and background in the field of Data Science and Machine Learning.
 
-![Portfolio Screenshot](https://i.imgur.com/your-screenshot-url.png) 
-*Note: You can take a screenshot of your finished portfolio and upload it to a site like Imgur to get a URL for the image above.*
+![Portfolio Screenshot](https://i.imgur.com/your-screenshot-url.png)
+_Note: You can take a screenshot of your finished portfolio and upload it to a site like Imgur to get a URL for the image above._
 
 ## ✨ Features
 
@@ -32,11 +32,11 @@ Make sure you have Node.js (version 18.x or later) and npm installed on your mac
 
 1.  **Clone the repository:**
     ```sh
-    git clone [https://github.com/nvshanmukh/your-portfolio-repo.git](https://github.com/nvshanmukh/your-portfolio-repo.git)
+    git clone [https://github.com/nvshanmukh/my-portfolio.git](https://github.com/nvshanmukh/my-portfolio.git)
     ```
 2.  **Navigate to the project directory:**
     ```sh
-    cd your-portfolio-repo
+    cd my-portfolio
     ```
 3.  **Install NPM packages:**
     ```sh
@@ -54,6 +54,7 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 This portfolio is designed to be easily customized.
 
 1.  **Update Your Information:**
+
     - Open `app/page.js`.
     - Modify the `portfolioData` object at the top of the file with your own bio, projects, skills, and contact information.
 
