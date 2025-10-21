@@ -146,26 +146,34 @@ const useIntersectionObserver = (options = {}) => {
 };
 
 // --- Components ---
-const TypeWriter = ({ text, delay = 100 }) => {
-	const [displayText, setDisplayText] = useState('');
-	const [currentIndex, setCurrentIndex] = useState(0);
+const TypeWriter = ({ text, delay = 100, pauseDelay = 2000 }) => {
+    const [displayText, setDisplayText] = useState('');
+    const [currentIndex, setCurrentIndex] = useState(0);
 
-	useEffect(() => {
-		if (currentIndex < text.length) {
-			const timeout = setTimeout(() => {
-				setDisplayText((prev) => prev + text[currentIndex]);
-				setCurrentIndex((prev) => prev + 1);
-			}, delay);
-			return () => clearTimeout(timeout);
-		}
-	}, [currentIndex, text, delay]);
+    useEffect(() => {
+        let timeout;
 
-	return (
-		<span>
-			{displayText}
-			<span className='animate-pulse'>|</span>
-		</span>
-	);
+        if (currentIndex < text.length) {
+            timeout = setTimeout(() => {
+                setDisplayText((prev) => prev + text[currentIndex]);
+                setCurrentIndex((prev) => prev + 1);
+            }, delay);
+        } else {
+            timeout = setTimeout(() => {
+                setDisplayText('');
+                setCurrentIndex(0);
+            }, pauseDelay);
+        }
+
+        return () => clearTimeout(timeout);
+    }, [currentIndex, text, delay, pauseDelay]);
+
+    return (
+        <span>
+            {displayText}
+            <span className='animate-pulse'>|</span>
+        </span>
+    );
 };
 
 const NavLink = ({ href, children, isActive }) => {
@@ -329,220 +337,227 @@ const FloatingElements = () => (
 );
 
 // --- Main Component ---
+// --- Main Component ---
 export default function EnhancedPortfolio() {
-	const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-	const sectionIds = ['home', 'about', 'projects', 'skills', 'contact'];
-	const activeSection = useScrollSpy(sectionIds);
+    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+    const sectionIds = ['home', 'about', 'projects', 'skills', 'contact'];
+    const activeSection = useScrollSpy(sectionIds);
 
-	return (
-		<div className='bg-gray-900 min-h-screen text-gray-300 font-sans selection:bg-cyan-500 selection:text-white relative overflow-x-hidden'>
-			<FloatingElements />
+    return (
+        <div className='bg-gray-900 min-h-screen text-gray-300 font-sans selection:bg-cyan-500 selection:text-white relative'>
+            <FloatingElements />
 
-			<div className='container mx-auto px-4 sm:px-6 lg:px-8 relative z-10'>
-				<header className='flex justify-between items-center py-6 sticky top-0 bg-gray-900/95 backdrop-blur-md z-50 border-b border-gray-800/50'>
-					<h1 className='text-2xl font-bold text-white hover:text-cyan-400 transition-colors duration-300 cursor-default'>
-						SHANMUKH
-					</h1>
+            <div className='container mx-auto px-4 sm:px-6 lg:px-8 relative z-10'>
+                
+                {/* 1. ADDED 'relative' to this header className */}
+                <header className='flex justify-between items-center py-6 sticky top-0 bg-gray-900/95 backdrop-blur-md z-50 border-b border-gray-800/50 relative'>
+                    <h1 className='text-2xl font-bold text-white hover:text-cyan-400 transition-colors duration-300 cursor-default'>
+                        SHANMUKH
+                    </h1>
 
-					<nav className='hidden md:flex items-center space-x-8'>
-						<NavLink href='#home' isActive={activeSection === 'home'}>
-							Home
-						</NavLink>
-						<NavLink href='#about' isActive={activeSection === 'about'}>
-							About
-						</NavLink>
-						<NavLink href='#projects' isActive={activeSection === 'projects'}>
-							Projects
-						</NavLink>
-						<NavLink href='#skills' isActive={activeSection === 'skills'}>
-							Skills
-						</NavLink>
-						<NavLink href='#contact' isActive={activeSection === 'contact'}>
-							Contact
-						</NavLink>
-					</nav>
+                    <nav className='hidden md:flex items-center space-x-8'>
+                        <NavLink href='#home' isActive={activeSection === 'home'}>
+                            Home
+                        </NavLink>
+                        <NavLink href='#about' isActive={activeSection === 'about'}>
+                            About
+                        </NavLink>
+                        <NavLink href='#projects' isActive={activeSection === 'projects'}>
+                            Projects
+                        </NavLink>
+                        <NavLink href='#skills' isActive={activeSection === 'skills'}>
+                            Skills
+                        </NavLink>
+                        <NavLink href='#contact' isActive={activeSection === 'contact'}>
+                            Contact
+                        </NavLink>
+                    </nav>
 
-					<button
-						className='md:hidden text-gray-400 hover:text-white transition-colors duration-300'
-						onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
-						{mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-					</button>
-				</header>
+                    <button
+                        className='md:hidden text-gray-400 hover:text-white transition-colors duration-300'
+                        onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
+                        {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+                    </button>
 
-				{mobileMenuOpen && (
-					<div className='md:hidden absolute top-full left-0 w-full bg-gray-900/95 backdrop-blur-md border-b border-gray-800/50 z-40'>
-						<nav className='flex flex-col space-y-4 p-6'>
-							{sectionIds.map((sectionId) => (
-								<NavLink
-									key={sectionId}
-									href={`#${sectionId}`}
-									isActive={activeSection === sectionId}>
-									{sectionId.charAt(0).toUpperCase() + sectionId.slice(1)}
-								</NavLink>
-							))}
-						</nav>
-					</div>
-				)}
+                    {/* 2. MOVED THIS ENTIRE BLOCK... */}
+                    {mobileMenuOpen && (
+                        <div className='md:hidden absolute top-full left-0 w-full bg-gray-900/95 backdrop-blur-md border-b border-gray-800/50 z-40'>
+                            <nav className='flex flex-col space-y-4 p-6'>
+                                {sectionIds.map((sectionId) => (
+                                    <NavLink
+                                        key={sectionId}
+                                        href={`#${sectionId}`}
+                                        isActive={activeSection === sectionId}>
+                                        {sectionId.charAt(0).toUpperCase() + sectionId.slice(1)}
+                                    </NavLink>
+                                ))}
+                            </nav>
+                        </div>
+                    )}
+                    {/* ...TO BE *INSIDE* THE CLOSING </header> TAG */}
+                </header>
 
-				<main className='pt-8'>
-					<section
-						id='home'
-						className='text-center py-20 md:py-32 flex flex-col items-center'>
-						<div className='w-36 h-36 bg-gradient-to-br from-cyan-400 to-blue-600 rounded-full mb-6 shadow-2xl flex items-center justify-center text-4xl font-bold text-white'>
-							SN
-						</div>
-						<h2 className='text-5xl md:text-6xl font-extrabold text-white'>
-							Hello, I&apos;m{' '}
-							<span className='text-cyan-400'>
-								<TypeWriter text='Shanmukh' delay={150} />
-							</span>
-						</h2>
-						<p className='text-xl md:text-2xl text-cyan-300 mt-2 font-medium'>
-							{portfolioData.title}
-						</p>
-						<p className='text-lg md:text-xl text-gray-400 mt-4 max-w-2xl leading-relaxed'>
-							{portfolioData.bio}
-						</p>
-						<div className='flex items-center gap-2 text-gray-500 mt-4'></div>
-						<div className='flex gap-4 mt-8'>
-							<a
-								href='#projects'
-								className='bg-cyan-500 hover:bg-cyan-600 text-white font-bold py-3 px-8 rounded-lg transition-all duration-300 shadow-lg shadow-cyan-500/20 hover:scale-105'>
-								View My Work
-							</a>
-							<a
-								href='#contact'
-								className='border-2 border-cyan-500 text-cyan-500 hover:bg-cyan-500 hover:text-white font-bold py-3 px-8 rounded-lg transition-all duration-300 hover:scale-105'>
-								Get In Touch
-							</a>
-						</div>
-					</section>
+                {/* The mobile menu code is no longer here */}
 
-					{/* About Section */}
-					<section id='about' className='py-20'>
-						<h2 className='text-4xl font-bold text-white text-center mb-12'>
-							About Me
-						</h2>
-						<div className='grid md:grid-cols-2 gap-12 max-w-6xl mx-auto'>
-							<div className='space-y-6'>
-								<div className='bg-gray-800/50 p-6 rounded-lg border border-gray-700/50'>
-									<div className='flex items-center gap-3 mb-4'>
-										<Calendar className='text-cyan-400' size={24} />
-										<h3 className='text-xl font-semibold text-white'>
-											Education
-										</h3>
-									</div>
-									<p className='text-gray-300 font-medium'>
-										{portfolioData.education.degree}
-									</p>
-									<p className='text-gray-400'>
-										{portfolioData.education.institution}
-									</p>
-									<p className='text-gray-400'>
-										{portfolioData.education.year}
-									</p>
-								</div>
-							</div>
-							<div className='space-y-6'>
-								<div className='bg-gray-800/50 p-6 rounded-lg border border-gray-700/50'>
-									<div className='flex items-center gap-3 mb-4'>
-										<Award className='text-cyan-400' size={24} />
-										<h3 className='text-xl font-semibold text-white'>
-											Key Achievements
-										</h3>
-									</div>
-									<ul className='space-y-2'>
-										{portfolioData.achievements.map((achievement, index) => (
-											<li
-												key={index}
-												className='text-gray-400 flex items-start gap-2'>
-												<ChevronDown
-													className='text-cyan-400 mt-1 rotate-[-90deg]'
-													size={16}
-												/>
-												{achievement}
-											</li>
-										))}
-									</ul>
-								</div>
-							</div>
-						</div>
-					</section>
+                <main className='pt-8'>
+                    <section
+                        id='home'
+                        className='text-center py-20 md:py-32 flex flex-col items-center'>
+                        <div className='w-36 h-36 bg-gradient-to-br from-cyan-400 to-blue-600 rounded-full mb-6 shadow-2xl flex items-center justify-center text-4xl font-bold text-white'>
+                            SN
+                        </div>
+                        <h2 className='text-5xl md:text-6xl font-extrabold text-white'>
+                            Hello, I&apos;m{' '}
+                            <span className='text-cyan-400'>
+                                <TypeWriter text='Shanmukh' delay={150} />
+                            </span>
+                        </h2>
+                        <p className='text-xl md:text-2xl text-cyan-300 mt-2 font-medium'>
+                            {portfolioData.title}
+                        </p>
+                        <p className='text-lg md:text-xl text-gray-400 mt-4 max-w-2xl leading-relaxed'>
+                            {portfolioData.bio}
+                        </p>
+                        <div className='flex items-center gap-2 text-gray-500 mt-4'></div>
+                        <div className='flex gap-4 mt-8'>
+                            <a
+                                href='#projects'
+                                className='bg-cyan-500 hover:bg-cyan-600 text-white font-bold py-3 px-8 rounded-lg transition-all duration-300 shadow-lg shadow-cyan-500/20 hover:scale-105'>
+                                View My Work
+                            </a>
+                            <a
+                                href='#contact'
+                                className='border-2 border-cyan-500 text-cyan-500 hover:bg-cyan-500 hover:text-white font-bold py-3 px-8 rounded-lg transition-all duration-300 hover:scale-105'>
+                                Get In Touch
+                            </a>
+                        </div>
+                    </section>
 
-					{/* Projects Section */}
-					<section id='projects' className='py-20'>
-						<h2 className='text-4xl font-bold text-white text-center mb-4'>
-							Featured Projects
-						</h2>
-						<p className='text-gray-400 text-center mb-12 max-w-2xl mx-auto'>
-							A collection of data science and machine learning projects
-							showcasing end-to-end development skills
-						</p>
-						<div className='grid md:grid-cols-2 lg:grid-cols-3 gap-8'>
-							{portfolioData.projects.map((project, index) => (
-								<ProjectCard key={index} project={project} index={index} />
-							))}
-						</div>
-					</section>
+                    {/* About Section */}
+                    <section id='about' className='py-20'>
+                        <h2 className='text-4xl font-bold text-white text-center mb-12'>
+                            About Me
+                        </h2>
+                        <div className='grid md:grid-cols-2 gap-12 max-w-6xl mx-auto'>
+                            <div className='space-y-6'>
+                                <div className='bg-gray-800/50 p-6 rounded-lg border border-gray-700/50'>
+                                    <div className='flex items-center gap-3 mb-4'>
+                                        <Calendar className='text-cyan-400' size={24} />
+                                        <h3 className='text-xl font-semibold text-white'>
+                                            Education
+                                        </h3>
+                                    </div>
+                                    <p className='text-gray-300 font-medium'>
+                                        {portfolioData.education.degree}
+                                    </p>
+                                    <p className='text-gray-400'>
+                                        {portfolioData.education.institution}
+                                    </p>
+                                    <p className='text-gray-400'>
+                                        {portfolioData.education.year}
+                                    </p>
+                                </div>
+                            </div>
+                            <div className='space-y-6'>
+                                <div className='bg-gray-800/50 p-6 rounded-lg border border-gray-700/50'>
+                                    <div className='flex items-center gap-3 mb-4'>
+                                        <Award className='text-cyan-400' size={24} />
+                                        <h3 className='text-xl font-semibold text-white'>
+                                            Key Achievements
+                                        </h3>
+                                    </div>
+                                    <ul className='space-y-2'>
+                                        {portfolioData.achievements.map((achievement, index) => (
+                                            <li
+                                                key={index}
+                                                className='text-gray-400 flex items-start gap-2'>
+                                                <ChevronDown
+                                                    className='text-cyan-400 mt-1 rotate-[-90deg]'
+                                                    size={16}
+                                                />
+                                                {achievement}
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
 
-					{/* Skills Section */}
-					<section id='skills' className='py-20'>
-						<h2 className='text-4xl font-bold text-white text-center mb-4'>
-							Technical Skills
-						</h2>
-						<p className='text-gray-400 text-center mb-12'>
-							Technologies and tools I work with
-						</p>
-						<div className='grid md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-7xl mx-auto'>
-							{Object.entries(portfolioData.skills).map(
-								([category, skills]) => (
-									<SkillCategory
-										key={category}
-										category={category}
-										skills={skills}
-									/>
-								)
-							)}
-						</div>
-					</section>
+                    {/* Projects Section */}
+                    <section id='projects' className='py-20'>
+                        <h2 className='text-4xl font-bold text-white text-center mb-4'>
+                            Featured Projects
+                        </h2>
+                        <p className='text-gray-400 text-center mb-12 max-w-2xl mx-auto'>
+                            A collection of data science and machine learning projects
+                            showcasing end-to-end development skills
+                        </p>
+                        <div className='grid md:grid-cols-2 lg:grid-cols-3 gap-8'>
+                            {portfolioData.projects.map((project, index) => (
+                                <ProjectCard key={index} project={project} index={index} />
+                            ))}
+                        </div>
+                    </section>
 
-					{/* Contact Section */}
-					<section id='contact' className='py-20 text-center'>
-						<h2 className='text-4xl font-bold text-white mb-4'>
-							Let&apos;s Connect
-						</h2>
-						<p className='text-gray-400 mb-12 max-w-2xl mx-auto'>
-							I&apos;m always interested in discussing data science projects,
-							collaboration opportunities, or just connecting with fellow
-							enthusiasts
-						</p>
-						<div className='flex flex-col sm:flex-row justify-center items-center gap-6 max-w-2xl mx-auto'>
-							<ContactLink
-								href={`mailto:${portfolioData.contact.email}`}
-								icon={<Mail size={24} />}
-								text={portfolioData.contact.email}
-							/>
-							<ContactLink
-								href={portfolioData.contact.linkedin}
-								icon={<Linkedin size={24} />}
-								text='LinkedIn'
-							/>
-							<ContactLink
-								href={portfolioData.contact.github}
-								icon={<Github size={24} />}
-								text='GitHub'
-							/>
-						</div>
-					</section>
-				</main>
+                    {/* Skills Section */}
+                    <section id='skills' className='py-20'>
+                        <h2 className='text-4xl font-bold text-white text-center mb-4'>
+                            Technical Skills
+                        </h2>
+                        <p className='text-gray-400 text-center mb-12'>
+                            Technologies and tools I work with
+                        </p>
+                        <div className='grid md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-7xl mx-auto'>
+                            {Object.entries(portfolioData.skills).map(
+                                ([category, skills]) => (
+                                    <SkillCategory
+                                        key={category}
+                                        category={category}
+                                        skills={skills}
+                                    />
+                                )
+                            )}
+                        </div>
+                    </section>
 
-				<footer className='text-center py-8 border-t border-gray-800/50'>
-					<p className='text-gray-500'>
-						&copy; {new Date().getFullYear()} {portfolioData.name}. All rights
-						reserved.
-					</p>
-				</footer>
-			</div>
-		</div>
-	);
+                    {/* Contact Section */}
+                    <section id='contact' className='py-20 text-center'>
+                        <h2 className='text-4xl font-bold text-white mb-4'>
+                            Let&apos;s Connect
+                        </h2>
+                        <p className='text-gray-400 mb-12 max-w-2xl mx-auto'>
+                            I&apos;m always interested in discussing data science projects,
+                            collaboration opportunities, or just connecting with fellow
+                            enthusiasts
+                        </p>
+                        <div className='flex flex-col sm:flex-row justify-center items-center gap-6 max-w-2xl mx-auto'>
+                            <ContactLink
+                                href={`mailto:${portfolioData.contact.email}`}
+                                icon={<Mail size={24} />}
+                                text={portfolioData.contact.email}
+                            />
+                            <ContactLink
+                                href={portfolioData.contact.linkedin}
+                                icon={<Linkedin size={24} />}
+                                text='LinkedIn'
+                            />
+                            <ContactLink
+                                href={portfolioData.contact.github}
+                                icon={<Github size={24} />}
+                                text='GitHub'
+                            />
+                        </div>
+                    </section>
+                </main>
+
+                <footer className='text-center py-8 border-t border-gray-800/50'>
+                    <p className='text-gray-500'>
+                        &copy; {new Date().getFullYear()} {portfolioData.name}. All rights
+                        reserved.
+                    </p>
+                </footer>
+            </div>
+        </div>
+    );
 }
